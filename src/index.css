@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+
+  --color-mauve-primary: #9A656B;
+  --color-mauve-hover: #825056;
+  --color-wine-ink: #5D2B31;
+  --color-cocoa-body: #4E2A2E;
+  --color-muted-rose: #7D5257;
+  --color-blush-canvas: #F8E6E4;
+  --color-blush-band: #F3D8D6;
+  --color-silk-card: #FDF7F6;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: #4E2A2E;
+    background-color: #F8E6E4;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+}
+
+.silk-hero-surface {
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255, 250, 249, 0.72) 0%, rgba(255, 250, 249, 0) 48%),
+    radial-gradient(circle at 36% 78%, rgba(235, 198, 195, 0.55) 0%, rgba(235, 198, 195, 0) 55%),
+    linear-gradient(125deg, #F6E0DE 0%, #ECCBC9 48%, #F3D9D7 100%);
+}
+
+.silk-band-soft {
+  background:
+    radial-gradient(circle at 80% 25%, rgba(255, 248, 247, 0.6) 0%, transparent 50%),
+    linear-gradient(180deg, #F6E1DF 0%, #F2D4D1 100%);
+}
+
+.silk-band-cream {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 252, 251, 0.8) 0%, transparent 55%),
+    linear-gradient(180deg, #FAF0EE 0%, #F5DFDD 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

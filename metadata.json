@@ -1,0 +1,6 @@
+{
+  "name": "Elarion's Finery",
+  "description": "Elegance in Every Detail — A warm boutique dress and accessories storefront featuring silk silhouettes, bow knitwear, handbags, and pearl jewelry.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
