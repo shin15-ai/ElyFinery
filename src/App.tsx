@@ -180,6 +180,12 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
     <div className="min-h-screen flex flex-col bg-[#F8E6E4] text-[#4E2A2E]">
+      <div className="bg-[#7D4B51] text-[#FDF7F6] text-[11px] sm:text-xs py-1.5 px-4 text-center tracking-wide border-b border-white/10">
+        <span className="font-medium">Published November 15, 2026</span>
+        <span aria-hidden="true" className="mx-2 text-white/60">&middot;</span>
+        <span className="text-white/90">Complimentary shipping on orders over ₱4,500</span>
+      </div>
+
       <Header
         bagCount={bagCount}
         activeSection={activeSection}

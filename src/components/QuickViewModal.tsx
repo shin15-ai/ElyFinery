@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Heart, Minus, Plus, Ruler, ShoppingBag, X } from 'lucide-react';
-import { Product, SIZE_GUIDE_ROWS } from '../data/catalog';
+import { formatPrice, Product, SIZE_GUIDE_ROWS } from '../data/catalog';
 import { ImageWithFallback } from './ImageWithFallback';
 
 interface QuickViewModalProps {
@@ -97,7 +97,7 @@ export function QuickViewModal({
                 {product.name}
               </h2>
               <span className="text-xl font-semibold text-[#5D2B31] tabular-nums shrink-0">
-                ${product.price}
+                {formatPrice(product.price)}
               </span>
             </div>
 
@@ -239,7 +239,7 @@ export function QuickViewModal({
               className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#9A656B] hover:bg-[#825056] text-white text-sm font-medium shadow-sm transition-colors cursor-pointer whitespace-nowrap"
             >
               <ShoppingBag className="w-4 h-4" />
-              <span>Add to Bag &middot; ${(product.price * quantity).toFixed(0)}</span>
+              <span>Add to Bag &middot; {formatPrice(product.price * quantity)}</span>
             </button>
 
             <button

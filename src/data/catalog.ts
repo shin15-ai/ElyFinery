@@ -64,6 +64,10 @@ export interface OrderReceipt {
   total: number;
 }
 
+export function formatPrice(amount: number): string {
+  return `₱${amount.toLocaleString('en-PH')}`;
+}
+
 export const EDITORIAL_MEDIA = {
   heroBoutiqueRack,
   aboutSatinMannequin,
@@ -104,7 +108,7 @@ export const CATALOG_PRODUCTS: Product[] = [
     name: 'Rosette Satin-Bow Chiffon Dress',
     category: 'Clothing',
     subcategory: 'Tea & Midi Dresses',
-    price: 198,
+    price: 3890,
     fabric: '100% Silk Chiffon',
     badge: 'Signature Piece',
     description:
@@ -125,7 +129,7 @@ export const CATALOG_PRODUCTS: Product[] = [
     name: 'Camellia Tie-Strap Silk Midi',
     category: 'Clothing',
     subcategory: 'Evening & Cocktail Dresses',
-    price: 224,
+    price: 4290,
     fabric: 'Mulberry Crêpe Silk',
     badge: 'New Arrival',
     description:
@@ -146,7 +150,7 @@ export const CATALOG_PRODUCTS: Product[] = [
     name: 'Aurelia Bias-Cut Satin Gown',
     category: 'Clothing',
     subcategory: 'Evening Silk Gowns',
-    price: 268,
+    price: 5490,
     fabric: 'Heavyweight Charmeuse Silk',
     badge: 'Small Batch',
     description:
@@ -167,7 +171,7 @@ export const CATALOG_PRODUCTS: Product[] = [
     name: 'Amour Eyelet Lace Garden Dress',
     category: 'Clothing',
     subcategory: 'Garden & Day Dresses',
-    price: 176,
+    price: 3490,
     fabric: 'Organic Cotton Guipure Lace',
     description:
       'Romantic puffed-sleeve midi dress crafted in breathable botanical lace, finished with a scalloped hem and blush velvet waist sash.',
@@ -186,7 +190,7 @@ export const CATALOG_PRODUCTS: Product[] = [
     name: 'Coquette Top-Handle Leather Bag',
     category: 'Accessories',
     subcategory: 'Leather Handbags',
-    price: 215,
+    price: 4150,
     fabric: 'Full-Grain Pebbled Calfskin',
     badge: 'Signature Piece',
     description:
@@ -207,7 +211,7 @@ export const CATALOG_PRODUCTS: Product[] = [
     name: 'Céleste Pearl-Button Bow Cardigan',
     category: 'More',
     subcategory: 'Atelier Knitwear',
-    price: 138,
+    price: 2690,
     fabric: 'Merino & Cashmere Blend',
     badge: 'New Arrival',
     description:
@@ -227,7 +231,7 @@ export const CATALOG_PRODUCTS: Product[] = [
     name: 'Lumina Freshwater Pearl Bow Drops',
     category: 'Accessories',
     subcategory: 'Fine Jewelry',
-    price: 84,
+    price: 1590,
     fabric: '18k Gold Vermeil & Freshwater Pearls',
     description:
       'Sculpted ribbon-bow studs paved with seed pearls and suspended luminous baroque freshwater pearl drops.',
@@ -246,7 +250,7 @@ export const CATALOG_PRODUCTS: Product[] = [
     name: 'Clarisse Gold-Bow Pearl Bracelet',
     category: 'More',
     subcategory: 'Giftable Keepsakes',
-    price: 112,
+    price: 2190,
     fabric: 'Cultured Pearls & Brushed Gold',
     description:
       'Hand-knotted lustrous freshwater pearl strand anchored by a sculpted brushed-gold ribbon bow clasp with crystal pavé detail.',

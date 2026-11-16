@@ -11,6 +11,7 @@ import {
 import {
   CategoryType,
   COLLECTION_GATEWAYS,
+  formatPrice,
   Product,
 } from '../data/catalog';
 import { BowDivider, SparkleStar } from './Ornaments';
@@ -366,7 +367,7 @@ export function CollectionSection({
                             </button>
                           </h3>
                           <span className="text-[15px] font-semibold text-[#5D2B31] tabular-nums shrink-0">
-                            ${product.price}
+                            {formatPrice(product.price)}
                           </span>
                         </div>
                       </div>

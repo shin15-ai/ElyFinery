@@ -58,9 +58,15 @@ export function AboutUsSection({ onLearnMore }: { onLearnMore: () => void }) {
               accessories.
             </p>
 
-            <p className="text-[15px] sm:text-base leading-relaxed text-[#4E2A2E] mb-8">
+            <p className="text-[15px] sm:text-base leading-relaxed text-[#4E2A2E] mb-4">
               Our goal is to provide a pleasant fashion experience where every
               woman can discover styles that reflect her unique self.
+            </p>
+
+            <p className="text-sm sm:text-[15px] leading-relaxed text-[#6D3239] italic font-display mb-8">
+              Thoughtfully designed and curated by{' '}
+              <span className="font-semibold not-italic">Ericson</span> &amp;{' '}
+              <span className="font-semibold not-italic">Trixie</span>.
             </p>
 
             <button

@@ -11,7 +11,7 @@ import {
   Truck,
   X,
 } from 'lucide-react';
-import { BagItem, OrderReceipt, Product } from '../data/catalog';
+import { BagItem, formatPrice, OrderReceipt, Product } from '../data/catalog';
 import { ImageWithFallback } from './ImageWithFallback';
 import { RibbonBowIcon } from './Ornaments';
 
@@ -32,8 +32,8 @@ interface ShoppingBagDrawerProps {
   onOrderConfirmed: (receipt: OrderReceipt) => void;
 }
 
-const FREE_SHIPPING_THRESHOLD = 180;
-const SHIPPING_FEE = 14;
+const FREE_SHIPPING_THRESHOLD = 4500;
+const SHIPPING_FEE = 180;
 
 export function ShoppingBagDrawer({
   isOpen,
@@ -216,7 +216,7 @@ export function ShoppingBagDrawer({
                       <span>Complimentary atelier shipping unlocked</span>
                     ) : (
                       <span>
-                        Add <strong className="tabular-nums">${amountToFreeShipping}</strong> more
+                        Add <strong className="tabular-nums">{formatPrice(amountToFreeShipping)}</strong> more
                         for complimentary shipping
                       </span>
                     )}
@@ -337,7 +337,7 @@ export function ShoppingBagDrawer({
                         </div>
 
                         <span className="text-sm font-semibold text-[#5D2B31] tabular-nums">
-                          ${item.product.price * item.quantity}
+                          {formatPrice(item.product.price * item.quantity)}
                         </span>
                       </div>
                     </div>
@@ -383,23 +383,23 @@ export function ShoppingBagDrawer({
                 <div className="space-y-1.5 text-sm">
                   <div className="flex justify-between text-[#6E4449]">
                     <span>Subtotal</span>
-                    <span className="tabular-nums">${subtotal}</span>
+                    <span className="tabular-nums">{formatPrice(subtotal)}</span>
                   </div>
                   {discount > 0 && (
                     <div className="flex justify-between text-[#9A656B]">
                       <span>Atelier Privilege (10%)</span>
-                      <span className="tabular-nums">-${discount}</span>
+                      <span className="tabular-nums">-{formatPrice(discount)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-[#6E4449]">
                     <span>Shipping</span>
                     <span className="tabular-nums">
-                      {shipping === 0 ? 'Complimentary' : `$${shipping}`}
+                      {shipping === 0 ? 'Complimentary' : formatPrice(shipping)}
                     </span>
                   </div>
                   <div className="flex justify-between pt-2 border-t border-[#B68488]/20 font-semibold text-base text-[#5D2B31]">
                     <span>Total</span>
-                    <span className="tabular-nums">${total}</span>
+                    <span className="tabular-nums">{formatPrice(total)}</span>
                   </div>
                 </div>
 
@@ -464,7 +464,7 @@ export function ShoppingBagDrawer({
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="(555) 234-5678"
+                    placeholder="(0917) 234-5678"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#B68488]/30 text-sm focus:outline-none focus:ring-2 focus:ring-[#9A656B]"
                   />
                 </div>
@@ -479,7 +479,7 @@ export function ShoppingBagDrawer({
                   required
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="248 Rue Saint-Honoré, Apt 4B"
+                  placeholder="142 Legazpi St, Legazpi Village"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#B68488]/30 text-sm focus:outline-none focus:ring-2 focus:ring-[#9A656B]"
                 />
               </div>
@@ -494,7 +494,7 @@ export function ShoppingBagDrawer({
                     required
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    placeholder="San Francisco"
+                    placeholder="Makati"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#B68488]/30 text-sm focus:outline-none focus:ring-2 focus:ring-[#9A656B]"
                   />
                 </div>
@@ -507,7 +507,7 @@ export function ShoppingBagDrawer({
                     required
                     value={postalCode}
                     onChange={(e) => setPostalCode(e.target.value)}
-                    placeholder="94102"
+                    placeholder="1229"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#B68488]/30 text-sm focus:outline-none focus:ring-2 focus:ring-[#9A656B]"
                   />
                 </div>
@@ -547,13 +547,13 @@ export function ShoppingBagDrawer({
             <div className="pt-4 border-t border-[#B68488]/20 space-y-3">
               <div className="flex justify-between text-sm font-semibold text-[#5D2B31]">
                 <span>Order Total ({detailedItems.reduce((a, b) => a + b.quantity, 0)} pieces)</span>
-                <span className="tabular-nums">${total}</span>
+                <span className="tabular-nums">{formatPrice(total)}</span>
               </div>
               <button
                 type="submit"
                 className="w-full py-3.5 rounded-full bg-[#9A656B] hover:bg-[#825056] text-white text-sm font-medium shadow-sm transition-colors cursor-pointer"
               >
-                Place Order &middot; ${total}
+                Place Order &middot; {formatPrice(total)}
               </button>
             </div>
           </form>
@@ -592,7 +592,7 @@ export function ShoppingBagDrawer({
                         </p>
                       </div>
                       <span className="tabular-nums font-medium text-[#5D2B31]">
-                        ${item.unitPrice * item.quantity}
+                        {formatPrice(item.unitPrice * item.quantity)}
                       </span>
                     </div>
                   ))}
@@ -600,12 +600,12 @@ export function ShoppingBagDrawer({
                 <div className="space-y-1 text-[#6E4449]">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span className="tabular-nums">${lastOrderReceipt.subtotal}</span>
+                    <span className="tabular-nums">{formatPrice(lastOrderReceipt.subtotal)}</span>
                   </div>
                   {lastOrderReceipt.discount > 0 && (
                     <div className="flex justify-between text-[#9A656B]">
                       <span>Discount</span>
-                      <span className="tabular-nums">-${lastOrderReceipt.discount}</span>
+                      <span className="tabular-nums">-{formatPrice(lastOrderReceipt.discount)}</span>
                     </div>
                   )}
                   <div className="flex justify-between">
@@ -613,12 +613,12 @@ export function ShoppingBagDrawer({
                     <span className="tabular-nums">
                       {lastOrderReceipt.shipping === 0
                         ? 'Complimentary'
-                        : `$${lastOrderReceipt.shipping}`}
+                        : formatPrice(lastOrderReceipt.shipping)}
                     </span>
                   </div>
                   <div className="flex justify-between pt-2 border-t border-[#B68488]/15 font-semibold text-sm text-[#5D2B31]">
                     <span>Total Paid ({lastOrderReceipt.paymentMethod})</span>
-                    <span className="tabular-nums">${lastOrderReceipt.total}</span>
+                    <span className="tabular-nums">{formatPrice(lastOrderReceipt.total)}</span>
                   </div>
                 </div>
               </div>

@@ -210,7 +210,11 @@ export function InfoModal({
               Inside the Atelier
             </h3>
             <p className="text-sm leading-relaxed text-[#4E2A2E]">
-              Every silhouette at <em>Elarion&rsquo;s Finery</em> is draped in
+              Conceived and designed by{' '}
+              <strong className="font-semibold text-[#5D2B31]">Ericson</strong>{' '}
+              and{' '}
+              <strong className="font-semibold text-[#5D2B31]">Trixie</strong>,
+              every silhouette at <em>Elarion&rsquo;s Finery</em> is draped in
               small batches using breathable mulberry silk, organic cotton lace,
               and hand-finished French seams.
             </p>

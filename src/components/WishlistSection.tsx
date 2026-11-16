@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Heart, ShoppingBag } from 'lucide-react';
-import { Product } from '../data/catalog';
+import { formatPrice, Product } from '../data/catalog';
 import { BowDivider } from './Ornaments';
 import { ImageWithFallback } from './ImageWithFallback';
 import { ScrollReveal } from './ScrollReveal';
@@ -175,7 +175,7 @@ export function WishlistSection({
                           {item.name}
                         </h3>
                         <p className="text-xs font-semibold text-[#7D5257] tabular-nums">
-                          ${item.price}
+                          {formatPrice(item.price)}
                         </p>
                       </div>
                       <button
