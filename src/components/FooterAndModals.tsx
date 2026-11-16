@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Check, Heart, Instagram, Mail, X } from 'lucide-react';
 import { BowDivider, RibbonBowIcon } from './Ornaments';
+import { ImageWithFallback } from './ImageWithFallback';
 import { ScrollReveal } from './ScrollReveal';
 
 export type InfoModalType = 'about' | 'story' | 'contact' | null;
@@ -62,14 +63,15 @@ export function Footer({ onOpenContact, onNavigate }: FooterProps) {
 
         {/* Social & Contact icon row with vertical hairline rules */}
         <div className="inline-flex items-center justify-center gap-6 mb-8">
-          <button
-            type="button"
-            onClick={onOpenContact}
-            aria-label="Follow Elarion's Finery lookbook"
+          <a
+            href="https://www.instagram.com/elarionsfinery?obrf=MW5hdmYyYjFmMGJlNQ=="
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit Elarion's Finery on Instagram"
             className="p-2 text-[#6D3239] hover:text-[#9A656B] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9A656B] rounded-full"
           >
             <Instagram className="w-5 h-5" />
-          </button>
+          </a>
           <span className="h-6 w-px bg-[#B68488]/60" aria-hidden="true" />
           <button
             type="button"
@@ -133,6 +135,26 @@ export function Footer({ onOpenContact, onNavigate }: FooterProps) {
           >
             Wishlist
           </a>
+          <a
+            href="#reviews"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate('reviews');
+            }}
+            className="hover:text-[#5D2B31] transition-colors"
+          >
+            Reviews
+          </a>
+          <a
+            href="#faq"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate('faq');
+            }}
+            className="hover:text-[#5D2B31] transition-colors"
+          >
+            FAQ
+          </a>
         </div>
 
         {/* Bottom signature line matching reference */}
@@ -190,7 +212,9 @@ export function InfoModal({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg bg-[#FDF7F6] rounded-3xl border border-[#B68488]/30 p-7 sm:p-9 shadow-2xl text-center"
+        className={`relative w-full ${
+          type === 'about' ? 'max-w-2xl' : 'max-w-lg'
+        } max-h-[90vh] overflow-y-auto bg-[#FDF7F6] rounded-3xl border border-[#B68488]/30 p-6 sm:p-9 shadow-2xl text-center`}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -242,6 +266,49 @@ export function InfoModal({
                 <p className="text-xs text-[#6E4449]">
                   Delivered in satin-ribboned boxes with cotton dust bags.
                 </p>
+              </div>
+            </div>
+
+            {/* The creators behind Elarion's Finery */}
+            <div className="pt-5 mt-2 border-t border-[#B68488]/25">
+              <h4 className="font-display text-2xl text-[#6D3239] mb-4">
+                The creators behind Elarion&rsquo;s Finery
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-center">
+                <div className="bg-white/80 rounded-2xl border border-[#B68488]/25 p-4 shadow-xs">
+                  <div className="w-full aspect-[3/4] rounded-t-[999px] rounded-b-xl overflow-hidden bg-[#F2DFDD] mb-3 border border-[#B68488]/20">
+                    <ImageWithFallback
+                      src="/assets/aistudio/IMG_20261116_223529_020_b5f52b05.jpeg"
+                      alt="Trixie, Co-creator and Design Planner of Elarion's Finery"
+                      className="w-full h-full object-cover object-top"
+                      fallbackTitle="Trixie"
+                    />
+                  </div>
+                  <p className="font-display text-xl text-[#5D2B31] font-medium">
+                    Trixie
+                  </p>
+                  <p className="text-xs text-[#7D5257] mt-0.5">
+                    Co-creator &amp; Design Planner
+                  </p>
+                </div>
+
+                <div className="bg-white/80 rounded-2xl border border-[#B68488]/25 p-4 shadow-xs">
+                  <div className="w-full aspect-[3/4] rounded-t-[999px] rounded-b-xl overflow-hidden bg-[#F2DFDD] mb-3 border border-[#B68488]/20">
+                    <ImageWithFallback
+                      src="/assets/aistudio/IMG_20261116_223324_620_5b6026b2.png"
+                      alt="Ericson, Co-creator and Web Developer of Elarion's Finery"
+                      className="w-full h-full object-cover object-top"
+                      fallbackTitle="Ericson"
+                    />
+                  </div>
+                  <p className="font-display text-xl text-[#5D2B31] font-medium">
+                    Ericson
+                  </p>
+                  <p className="text-xs text-[#7D5257] mt-0.5">
+                    Co-creator &amp; Web Developer
+                  </p>
+                </div>
               </div>
             </div>
           </div>

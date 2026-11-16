@@ -6,6 +6,7 @@ import {
   Search,
   ShoppingBag,
   SlidersHorizontal,
+  Star,
   X,
 } from 'lucide-react';
 import {
@@ -14,12 +15,14 @@ import {
   formatPrice,
   Product,
 } from '../data/catalog';
+import { getProductRatingSummary, Review } from '../data/reviews';
 import { BowDivider, SparkleStar } from './Ornaments';
 import { ImageWithFallback } from './ImageWithFallback';
 import { ScrollReveal } from './ScrollReveal';
 
 interface CollectionSectionProps {
   products: Product[];
+  reviews: Review[];
   selectedCategory: CategoryType;
   onSelectCategory: (cat: CategoryType) => void;
   wishlistIds: string[];
@@ -39,6 +42,7 @@ const CATEGORY_TABS: Array<{ value: CategoryType; label: string }> = [
 
 export function CollectionSection({
   products,
+  reviews,
   selectedCategory,
   onSelectCategory,
   wishlistIds,
@@ -370,6 +374,37 @@ export function CollectionSection({
                             {formatPrice(product.price)}
                           </span>
                         </div>
+
+                        {/* Live Rating Summary */}
+                        {(() => {
+                          const ratingStats = getProductRatingSummary(reviews, product.id);
+                          return (
+                            <button
+                              type="button"
+                              onClick={() => onQuickView(product)}
+                              className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-[#7D5257] hover:text-[#5D2B31] transition-colors cursor-pointer"
+                            >
+                              <Star
+                                className={`w-3.5 h-3.5 ${
+                                  ratingStats.count > 0
+                                    ? 'fill-[#9A656B] text-[#9A656B]'
+                                    : 'text-[#B68488]/50'
+                                }`}
+                              />
+                              {ratingStats.count > 0 ? (
+                                <span className="tabular-nums">
+                                  <strong className="font-medium text-[#5D2B31]">
+                                    {ratingStats.average.toFixed(1)}
+                                  </strong>{' '}
+                                  &middot; {ratingStats.count}{' '}
+                                  {ratingStats.count === 1 ? 'review' : 'reviews'}
+                                </span>
+                              ) : (
+                                <span>Be the first to review</span>
+                              )}
+                            </button>
+                          );
+                        })()}
                       </div>
 
                       <div className="space-y-3 pt-2 border-t border-[#B68488]/15">

@@ -7,11 +7,14 @@ import {
   OrderReceipt,
   Product,
 } from './data/catalog';
+import { INITIAL_REVIEWS, Review } from './data/reviews';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { AboutUsSection, OurStorySection } from './components/AboutAndStory';
 import { CollectionSection } from './components/CollectionSection';
 import { WishlistSection } from './components/WishlistSection';
+import { ReviewsSection } from './components/ReviewsSection';
+import { FaqSection } from './components/FaqSection';
 import { QuickViewModal } from './components/QuickViewModal';
 import { ShoppingBagDrawer } from './components/ShoppingBagDrawer';
 import { Footer, InfoModal, InfoModalType } from './components/FooterAndModals';
@@ -20,6 +23,8 @@ const STORAGE_KEYS = {
   bag: 'elarion_bag_v1',
   wishlist: 'elarion_wishlist_v1',
   receipt: 'elarion_receipt_v1',
+  reviews: 'elarion_reviews_v1',
+  helpful: 'elarion_helpful_v1',
 };
 
 function readStorage<T>(key: string, fallback: T): T {
@@ -45,6 +50,12 @@ export default function App() {
   );
   const [lastOrderReceipt, setLastOrderReceipt] = useState<OrderReceipt | null>(
     () => readStorage<OrderReceipt | null>(STORAGE_KEYS.receipt, null)
+  );
+  const [reviews, setReviews] = useState<Review[]>(() =>
+    readStorage<Review[]>(STORAGE_KEYS.reviews, INITIAL_REVIEWS)
+  );
+  const [helpfulIds, setHelpfulIds] = useState<string[]>(() =>
+    readStorage<string[]>(STORAGE_KEYS.helpful, [])
   );
 
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -82,6 +93,25 @@ export default function App() {
       // Ignore storage quota errors
     }
   }, [lastOrderReceipt]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEYS.reviews, JSON.stringify(reviews));
+    } catch {
+      // Ignore storage quota errors
+    }
+  }, [reviews]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEYS.helpful,
+        JSON.stringify(helpfulIds)
+      );
+    } catch {
+      // Ignore storage quota errors
+    }
+  }, [helpfulIds]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -175,6 +205,39 @@ export default function App() {
     );
   };
 
+  const handleToggleHelpful = (reviewId: string) => {
+    setHelpfulIds((prev) =>
+      prev.includes(reviewId)
+        ? prev.filter((id) => id !== reviewId)
+        : [...prev, reviewId]
+    );
+  };
+
+  const handleSubmitReview = (input: {
+    productId: string | 'boutique';
+    authorName: string;
+    rating: number;
+    title: string;
+    comment: string;
+  }) => {
+    const newReview: Review = {
+      id: `rev-${Date.now()}`,
+      productId: input.productId,
+      authorName: input.authorName,
+      rating: input.rating,
+      title: input.title,
+      comment: input.comment,
+      createdAt: new Date().toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      helpfulCount: 0,
+    };
+    setReviews((prev) => [newReview, ...prev]);
+    showToast('Thank you for sharing your review!');
+  };
+
   const bagCount = bagItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
@@ -205,6 +268,7 @@ export default function App() {
 
         <CollectionSection
           products={CATALOG_PRODUCTS}
+          reviews={reviews}
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
           wishlistIds={wishlistIds}
@@ -226,6 +290,16 @@ export default function App() {
             handleAddToBag(product, colorName, size, 1)
           }
         />
+
+        <ReviewsSection
+          reviews={reviews}
+          products={CATALOG_PRODUCTS}
+          helpfulIds={helpfulIds}
+          onToggleHelpful={handleToggleHelpful}
+          onSubmitReview={handleSubmitReview}
+        />
+
+        <FaqSection onOpenContact={() => setInfoModal('contact')} />
       </main>
 
       <Footer
@@ -235,12 +309,14 @@ export default function App() {
 
       <QuickViewModal
         product={quickViewProduct}
+        reviews={reviews}
         isSaved={
           quickViewProduct ? wishlistIds.includes(quickViewProduct.id) : false
         }
         onClose={() => setQuickViewProduct(null)}
         onToggleWishlist={handleToggleWishlist}
         onAddToBag={handleAddToBag}
+        onSubmitReview={handleSubmitReview}
       />
 
       <ShoppingBagDrawer

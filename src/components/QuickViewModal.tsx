@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Heart, Minus, Plus, Ruler, ShoppingBag, X } from 'lucide-react';
+import { Heart, Minus, Plus, Ruler, ShoppingBag, Star, X } from 'lucide-react';
 import { formatPrice, Product, SIZE_GUIDE_ROWS } from '../data/catalog';
+import { getProductRatingSummary, Review } from '../data/reviews';
 import { ImageWithFallback } from './ImageWithFallback';
 
 interface QuickViewModalProps {
   product: Product | null;
+  reviews: Review[];
   isSaved: boolean;
   onClose: () => void;
   onToggleWishlist: (productId: string) => void;
@@ -14,19 +16,32 @@ interface QuickViewModalProps {
     size: string,
     quantity: number
   ) => void;
+  onSubmitReview: (input: {
+    productId: string | 'boutique';
+    authorName: string;
+    rating: number;
+    title: string;
+    comment: string;
+  }) => void;
 }
 
 export function QuickViewModal({
   product,
+  reviews,
   isSaved,
   onClose,
   onToggleWishlist,
   onAddToBag,
+  onSubmitReview,
 }: QuickViewModalProps) {
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewName, setReviewName] = useState('');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState('');
 
   useEffect(() => {
     if (!product) return;
@@ -34,6 +49,10 @@ export function QuickViewModal({
     setSelectedSize(product.sizes[1] || product.sizes[0] || 'One Size');
     setQuantity(1);
     setShowSizeGuide(false);
+    setShowReviewForm(false);
+    setReviewName('');
+    setReviewRating(5);
+    setReviewComment('');
   }, [product]);
 
   useEffect(() => {
@@ -100,6 +119,43 @@ export function QuickViewModal({
                 {formatPrice(product.price)}
               </span>
             </div>
+
+            {/* Piece Rating Bar */}
+            {(() => {
+              const stats = getProductRatingSummary(reviews, product.id);
+              return (
+                <div className="flex items-center justify-between gap-3 text-xs text-[#7D5257]">
+                  <div className="inline-flex items-center gap-1.5">
+                    <div className="flex items-center gap-0.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`w-3.5 h-3.5 ${
+                            star <= Math.round(stats.average || 0)
+                              ? 'fill-[#9A656B] text-[#9A656B]'
+                              : 'text-[#B68488]/40'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="tabular-nums">
+                      {stats.count > 0
+                        ? `${stats.average.toFixed(1)} (${stats.count} ${
+                            stats.count === 1 ? 'review' : 'reviews'
+                          })`
+                        : 'No reviews yet'}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowReviewForm((prev) => !prev)}
+                    className="font-medium text-[#9A656B] hover:text-[#6D3239] underline underline-offset-2 cursor-pointer"
+                  >
+                    {showReviewForm ? 'Close Review Form' : 'Write a Review'}
+                  </button>
+                </div>
+              );
+            })()}
 
             <p className="text-sm leading-relaxed text-[#4E2A2E]">
               {product.description}
@@ -204,6 +260,98 @@ export function QuickViewModal({
                 {product.careInstructions}
               </p>
             </div>
+
+            {/* Inline Quick Review Form & Recent Notes */}
+            {showReviewForm && (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!reviewName.trim() || !reviewComment.trim()) return;
+                  onSubmitReview({
+                    productId: product.id,
+                    authorName: reviewName.trim(),
+                    rating: reviewRating,
+                    title: `${reviewRating}-star atelier note`,
+                    comment: reviewComment.trim(),
+                  });
+                  setReviewName('');
+                  setReviewComment('');
+                  setReviewRating(5);
+                  setShowReviewForm(false);
+                }}
+                className="p-3.5 rounded-xl bg-[#F6E6E4] border border-[#B68488]/25 space-y-2.5 text-xs"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-[#5D2B31]">Your Rating</span>
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setReviewRating(star)}
+                        aria-label={`Rate ${star} stars`}
+                        className="p-0.5 cursor-pointer"
+                      >
+                        <Star
+                          className={`w-4 h-4 ${
+                            star <= reviewRating
+                              ? 'fill-[#9A656B] text-[#9A656B]'
+                              : 'text-[#B68488]/45'
+                          }`}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  required
+                  value={reviewName}
+                  onChange={(e) => setReviewName(e.target.value)}
+                  placeholder="Your name"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-[#B68488]/30 text-xs focus:outline-none focus:ring-2 focus:ring-[#9A656B]"
+                />
+                <textarea
+                  rows={2}
+                  required
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  placeholder="How did it fit and feel?"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-[#B68488]/30 text-xs focus:outline-none focus:ring-2 focus:ring-[#9A656B]"
+                />
+                <button
+                  type="submit"
+                  className="w-full py-2 rounded-full bg-[#9A656B] hover:bg-[#825056] text-white text-xs font-medium cursor-pointer"
+                >
+                  Submit Review
+                </button>
+              </form>
+            )}
+
+            {reviews.filter((r) => r.productId === product.id).length > 0 && (
+              <div className="pt-2 border-t border-[#B68488]/15 space-y-2">
+                <p className="text-xs font-medium text-[#5D2B31]">
+                  Recent Client Notes
+                </p>
+                {reviews
+                  .filter((r) => r.productId === product.id)
+                  .slice(0, 2)
+                  .map((rev) => (
+                    <div
+                      key={rev.id}
+                      className="p-2.5 rounded-xl bg-white/80 border border-[#B68488]/15 text-xs space-y-1"
+                    >
+                      <div className="flex items-center justify-between text-[#5D2B31]">
+                        <span className="font-medium">{rev.authorName}</span>
+                        <span className="tabular-nums text-[#9A656B]">
+                          {rev.rating}.0 ★
+                        </span>
+                      </div>
+                      <p className="text-[#6E4449]">&ldquo;{rev.comment}&rdquo;</p>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
 
           {/* Purchase Actions */}
